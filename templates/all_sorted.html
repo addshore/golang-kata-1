@@ -1,0 +1,39 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>All Books and Magazines (Sorted by Title)</title>
+    <meta charset="UTF-8">
+</head>
+<body>
+    <h1>All Books and Magazines (Sorted by Title)</h1>
+    <a href="/">Back to Home</a>
+    <form method="get" action="/all-sorted">
+        <label for="dir">Sort direction:</label>
+        <select id="dir" name="dir">
+            <option value="asc">Ascending</option>
+            <option value="desc">Descending</option>
+        </select>
+        <button type="submit">Sort</button>
+    </form>
+    <table border="1">
+        <tr>
+            <th>Type</th>
+            <th>Title</th>
+            <th>ISBN</th>
+            <th>Authors</th>
+            <th>Description</th>
+            <th>Published At</th>
+        </tr>
+        {{range .}}
+        <tr>
+            <td>{{.Type}}</td>
+            <td>{{.Title}}</td>
+            <td>{{.ISBN}}</td>
+            <td>{{.Authors}}</td>
+            <td>{{.Description}}</td>
+            <td>{{.PublishedAt}}</td>
+        </tr>
+        {{end}}
+    </table>
+</body>
+</html>

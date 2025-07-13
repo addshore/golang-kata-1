@@ -1,0 +1,28 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Add Author Names</title>
+    <meta charset="UTF-8">
+</head>
+<body>
+    <h1>Enter Names for New Authors</h1>
+    <form method="post" action="/add-item">
+        {{range .NewAuthors}}
+        <fieldset>
+            <legend>{{.}}</legend>
+            <input type="hidden" name="new_author_email" value="{{.}}">
+            <label>First Name:</label>
+            <input type="text" name="firstname_{{.}}" required>
+            <label>Last Name:</label>
+            <input type="text" name="lastname_{{.}}" required>
+        </fieldset>
+        <br>
+        {{end}}
+        {{range $key, $value := .PrevData}}
+        <input type="hidden" name="{{$key}}" value="{{$value}}">
+        {{end}}
+        <button type="submit">Add</button>
+    </form>
+    <a href="/">Back to Home</a>
+</body>
+</html>

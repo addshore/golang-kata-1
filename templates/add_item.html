@@ -1,0 +1,41 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Add Book or Magazine</title>
+    <meta charset="UTF-8">
+    <script>
+    function updateFields() {
+        var type = document.getElementById('type').value;
+        document.getElementById('descField').style.display = (type === 'book') ? 'block' : 'none';
+        document.getElementById('pubField').style.display = (type === 'magazine') ? 'block' : 'none';
+    }
+    window.onload = updateFields;
+    </script>
+</head>
+<body>
+    <h1>Add Book or Magazine</h1>
+    <form method="post" action="/add-item">
+        <label>Type:</label>
+        <select name="type" id="type" required onchange="updateFields()">
+            <option value="book">Book</option>
+            <option value="magazine">Magazine</option>
+        </select><br><br>
+        <label>Title:</label>
+        <input type="text" name="title" required><br><br>
+        <label>ISBN:</label>
+        <input type="text" name="isbn" required><br><br>
+        <label>Authors (comma-separated emails):</label>
+        <input type="text" name="authors" required><br><br>
+        <div id="descField">
+            <label>Description (for books):</label>
+            <textarea name="description"></textarea><br><br>
+        </div>
+        <div id="pubField">
+            <label>Published At (for magazines, format DD.MM.YYYY):</label>
+            <input type="text" name="publishedAt"><br><br>
+        </div>
+        <button type="submit">Add</button>
+    </form>
+    <a href="/">Back to Home</a>
+</body>
+</html>

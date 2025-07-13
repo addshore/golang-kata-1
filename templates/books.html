@@ -1,0 +1,34 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Books</title>
+    <meta charset="UTF-8">
+</head>
+<body>
+    <h1>Books</h1>
+    <form method="get" action="/books">
+        <label for="isbn">Search by ISBN:</label>
+        <input type="text" id="isbn" name="isbn" placeholder="Enter ISBN">
+        <label for="author">or Author Email:</label>
+        <input type="text" id="author" name="author" placeholder="Enter Author Email">
+        <button type="submit">Search</button>
+        <a href="/books">Show All</a>
+    </form>
+    <table border="1">
+        <tr>
+            <th>Title</th>
+            <th>ISBN</th>
+            <th>Authors</th>
+            <th>Description</th>
+        </tr>
+        {{range .}}
+        <tr>
+            <td>{{.Title}}</td>
+            <td>{{.ISBN}}</td>
+            <td>{{.Authors}}</td>
+            <td>{{.Description}}</td>
+        </tr>
+        {{end}}
+    </table>
+</body>
+</html>
