@@ -1,0 +1,19 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Search</title>
+</head>
+<body>
+    <h1>Search</h1>
+    <form method="GET" action="/search">
+        <label>Enter ISBN or Author Email: <input type="text" name="query"></label>
+        <button type="submit">Search</button>
+    </form>
+    <h2>Results</h2>
+    <ul>
+        {{range .}}
+        <li>{{.}}</li>
+        {{end}}
+    </ul>
+</body>
+</html>

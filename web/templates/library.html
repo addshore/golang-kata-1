@@ -1,0 +1,27 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Library</title>
+</head>
+<body>
+    <h1>Library</h1>
+    <h2>Books</h2>
+    <ul>
+        {{range .Books}}
+        <li>{{.Title}} - {{.Author}} - {{.ISBN}} - {{.Genre}}</li>
+        {{end}}
+    </ul>
+    <h2>Magazines</h2>
+    <ul>
+        {{range .Magazines}}
+        <li>{{.Title}} - {{.Publisher}} - {{.IssueNumber}} - {{.PublishedAt}}</li>
+        {{end}}
+    </ul>
+    <h2>Authors</h2>
+    <ul>
+        {{range .Authors}}
+        <li>{{.FirstName}} {{.LastName}} - {{.Email}}</li>
+        {{end}}
+    </ul>
+</body>
+</html>
