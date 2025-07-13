@@ -1,0 +1,71 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Library</title>
+    <style>
+        body { font-family: sans-serif; line-height: 1.6; margin: 2em; }
+        table { border-collapse: collapse; width: 100%; }
+        th, td { border: 1px solid #ccc; padding: 8px; text-align: left; }
+        th { background-color: #f2f2f2; }
+        nav, .actions { margin-bottom: 1em; }
+        a { text-decoration: none; }
+        .add-link { display: inline-block; padding: 10px 15px; background-color: #28a745; color: white; border-radius: 5px; }
+        .search-form { margin-bottom: 1em; }
+    </style>
+</head>
+<body>
+
+<h1>Library</h1>
+
+<div class="actions">
+    <a href="/add" class="add-link">Add New Item</a>
+</div>
+
+<div class="search-form">
+    <form action="/search" method="get">
+        <input type="text" name="query" placeholder="Search..." value="{{.Query}}">
+        <select name="type">
+            <option value="isbn" {{if eq .SearchType "isbn"}}selected{{end}}>by ISBN</option>
+            <option value="author" {{if eq .SearchType "author"}}selected{{end}}>by Author Email</option>
+        </select>
+        <button type="submit">Search</button>
+        <a href="/">Clear Search</a>
+    </form>
+</div>
+
+<nav>
+    Sort by Title:
+    <a href="{{.SortURLASC}}">Ascending</a> |
+    <a href="{{.SortURLDESC}}">Descending</a>
+</nav>
+
+{{if .Message}}
+<p><strong>{{.Message}}</strong></p>
+{{end}}
+
+<table>
+    <thead>
+    <tr>
+        <th>Type</th>
+        <th>Title</th>
+        <th>ISBN</th>
+        <th>Authors</th>
+        <th>Details</th>
+    </tr>
+    </thead>
+    <tbody>
+    {{range .Items}}
+    <tr>
+        <td>{{.GetType}}</td>
+        <td>{{.GetTitle}}</td>
+        <td>{{.GetISBN}}</td>
+        <td>{{ join .GetAuthors ", " }}</td>
+        <td>{{if eq .GetType "Book"}}Description: {{.GetDescription}}{{else}}Published At: {{.GetPublishedAt}}{{end}}</td>
+    </tr>
+    {{end}}
+    </tbody>
+</table>
+
+</body>
+</html>

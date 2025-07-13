@@ -1,0 +1,84 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Add Item</title>
+    <style>
+        body { font-family: sans-serif; line-height: 1.6; margin: 2em; }
+        form { max-width: 600px; }
+        div { margin-bottom: 1em; }
+        label { display: block; margin-bottom: .2em; }
+        input[type="text"], textarea, select { width: 100%; padding: 8px; box-sizing: border-box; }
+        fieldset { border: 1px solid #ccc; padding: 1em; }
+        button { padding: 10px 15px; background-color: #007bff; color: white; border: none; border-radius: 5px; cursor: pointer; }
+    </style>
+</head>
+<body>
+
+<h1>Add New Library Item</h1>
+
+<form action="/save" method="post">
+    <div>
+        <label>Item Type:</label>
+        <input type="radio" name="itemType" value="book" id="type_book" checked onchange="toggleFields()"> <label for="type_book" style="display: inline;">Book</label>
+        <input type="radio" name="itemType" value="magazine" id="type_magazine" onchange="toggleFields()"> <label for="type_magazine" style="display: inline;">Magazine</label>
+    </div>
+
+    <div>
+        <label for="title">Title:</label>
+        <input type="text" id="title" name="title" required>
+    </div>
+
+    <div>
+        <label for="isbn">ISBN:</label>
+        <input type="text" id="isbn" name="isbn" required>
+    </div>
+
+    <div id="book_fields">
+        <label for="description">Description:</label>
+        <textarea id="description" name="description"></textarea>
+    </div>
+
+    <div id="magazine_fields" style="display: none;">
+        <label for="publishedAt">Published At (dd.mm.yyyy):</label>
+        <input type="text" id="publishedAt" name="publishedAt">
+    </div>
+
+    <fieldset>
+        <legend>Authors</legend>
+        <div>
+            <label for="existing_authors">Select Existing Authors (hold Ctrl/Cmd to select multiple):</label>
+            <select id="existing_authors" name="existing_authors" multiple size="5">
+                {{range .Authors}}
+                <option value="{{.Email}}">{{.FirstName}} {{.LastName}} ({{.Email}})</option>
+                {{end}}
+            </select>
+        </div>
+        <p><strong>OR</strong> add a new author (will be added to the library and selected):</p>
+        <div>
+            <label for="new_author_email">New Author Email:</label>
+            <input type="text" id="new_author_email" name="new_author_email">
+        </div>
+        <div>
+            <label for="new_author_firstname">New Author First Name:</label>
+            <input type="text" id="new_author_firstname" name="new_author_firstname">
+        </div>
+        <div>
+            <label for="new_author_lastname">New Author Last Name:</label>
+            <input type="text" id="new_author_lastname" name="new_author_lastname">
+        </div>
+    </fieldset>
+
+    <button type="submit">Save Item</button>
+</form>
+
+<script>
+    function toggleFields() {
+        const isBook = document.getElementById('type_book').checked;
+        document.getElementById('book_fields').style.display = isBook ? 'block' : 'none';
+        document.getElementById('magazine_fields').style.display = isBook ? 'none' : 'block';
+    }
+</script>
+
+</body>
+</html>

@@ -5,3 +5,7 @@ null-ferdinand@echocat.org;Franz;Ferdinand
 null-gustafsson@echocat.org;Karl;Gustafsson
 null-lieblich@echocat.org;Werner;Lieblich
 null-rabe@echocat.org;Harald;Rabe
+foo@bar.com;foo;bar
+bar@baz.com;bar;baz
+foo2@bar.com;foo2;bar
+foo3@bar.com;dupe;doeepeee
