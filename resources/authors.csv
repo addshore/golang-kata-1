@@ -1,7 +1,9 @@
-﻿email;firstname;lastname
+email;firstname;lastname
 null-walter@echocat.org;Paul;Walter
 null-mueller@echocat.org;Max;Müller
 null-ferdinand@echocat.org;Franz;Ferdinand
+foo2@bar.com;FOOOOO;BAAARRRRR
 null-gustafsson@echocat.org;Karl;Gustafsson
 null-lieblich@echocat.org;Werner;Lieblich
 null-rabe@echocat.org;Harald;Rabe
+foo@bar.com;foo;bar
