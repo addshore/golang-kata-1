@@ -213,3 +213,31 @@ func (lib *Library) SearchByISBN(isbn string) ([]*Book, []*Magazine) {
 
 	return books, magazines
 }
+
+// SearchByAuthorEmail searches for books and magazines by author email
+func (lib *Library) SearchByAuthorEmail(email string) ([]*Book, []*Magazine) {
+	var books []*Book
+	var magazines []*Magazine
+
+	// Search books
+	for _, book := range lib.Books {
+		for _, authorEmail := range book.Authors {
+			if authorEmail == email {
+				books = append(books, book)
+				break
+			}
+		}
+	}
+
+	// Search magazines
+	for _, magazine := range lib.Magazines {
+		for _, authorEmail := range magazine.Authors {
+			if authorEmail == email {
+				magazines = append(magazines, magazine)
+				break
+			}
+		}
+	}
+
+	return books, magazines
+}

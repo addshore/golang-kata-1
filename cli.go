@@ -54,6 +54,37 @@ func (cli *CLI) SearchByISBN(isbn string) {
 	}
 }
 
+// SearchByAuthorEmail searches and displays results by author email
+func (cli *CLI) SearchByAuthorEmail(email string) {
+	books, magazines := cli.library.SearchByAuthorEmail(email)
+
+	if len(books) == 0 && len(magazines) == 0 {
+		fmt.Printf("\nNo results found for author email: %s\n", email)
+		return
+	}
+
+	authorName := "Unknown"
+	if author, ok := cli.library.Authors[email]; ok {
+		authorName = fmt.Sprintf("%s %s", author.FirstName, author.LastName)
+	}
+
+	fmt.Printf("\n=== SEARCH RESULTS FOR AUTHOR: %s (%s) ===\n", authorName, email)
+
+	if len(books) > 0 {
+		fmt.Println("\n--- BOOKS ---")
+		for _, book := range books {
+			cli.displayBook(book)
+		}
+	}
+
+	if len(magazines) > 0 {
+		fmt.Println("\n--- MAGAZINES ---")
+		for _, magazine := range magazines {
+			cli.displayMagazine(magazine)
+		}
+	}
+}
+
 func (cli *CLI) displayBook(book *Book) {
 	authorNames := cli.library.GetAuthorNames(book.Authors)
 	fmt.Printf("\nTitle: %s\n", book.Title)
