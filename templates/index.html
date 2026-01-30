@@ -1,0 +1,64 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Echocat Library</title>
+    <style>
+        table { border-collapse: collapse; width: 100%; }
+        th, td { border: 1px solid #ddd; padding: 8px; text-align: left; }
+        tr:nth-child(even) { background-color: #f2f2f2; }
+        .form-section { margin-top: 20px; border: 1px solid #ccc; padding: 10px; }
+    </style>
+</head>
+<body>
+    <h1>Echocat Library</h1>
+
+    <form action="/" method="GET">
+        Search by ISBN: <input type="text" name="isbn">
+        or Author Email: <input type="text" name="email">
+        <input type="submit" value="Search">
+        <a href="/?sort=title">Sort by Title</a>
+        <a href="/">Show All</a>
+    </form>
+
+    <h2>Books and Magazines</h2>
+    <table>
+        <tr>
+            <th>Type</th>
+            <th>Title</th>
+            <th>ISBN</th>
+            <th>Authors</th>
+            <th>Details</th>
+        </tr>
+        {{range .Items}}
+        <tr>
+            <td>{{.Type}}</td>
+            <td>{{.Title}}</td>
+            <td>{{.ISBN}}</td>
+            <td>{{.AuthorsFormatted}}</td>
+            <td>{{.Details}}</td>
+        </tr>
+        {{end}}
+    </table>
+
+    <div class="form-section">
+        <h3>Add New Item</h3>
+        <form action="/add" method="POST">
+            Type: <select name="type">
+                <option value="book">Book</option>
+                <option value="magazine">Magazine</option>
+            </select><br>
+            Title: <input type="text" name="title" required><br>
+            ISBN: <input type="text" name="isbn" required><br>
+            Authors (emails, comma separated): <input type="text" name="authors" required><br>
+            Description (for Book): <textarea name="description"></textarea><br>
+            Published At (for Magazine, DD.MM.YYYY): <input type="text" name="publishedAt"><br>
+            <hr>
+            <h4>If author(s) are new, please provide their details (Email from above):</h4>
+            New Author Email: <input type="text" name="new_author_email"><br>
+            First Name: <input type="text" name="new_author_firstname"><br>
+            Last Name: <input type="text" name="new_author_lastname"><br>
+            <input type="submit" value="Add Item">
+        </form>
+    </div>
+</body>
+</html>
