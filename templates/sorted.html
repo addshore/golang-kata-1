@@ -1,0 +1,84 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Sorted View - Library System</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 20px;
+        }
+        h1, h2 {
+            color: #333;
+        }
+        .nav {
+            background: #f0f0f0;
+            padding: 10px;
+            margin-bottom: 20px;
+        }
+        .nav a {
+            margin-right: 15px;
+            text-decoration: none;
+            color: #0066cc;
+        }
+        .item {
+            border: 1px solid #ddd;
+            padding: 15px;
+            margin-bottom: 15px;
+            border-radius: 5px;
+        }
+        .item h3 {
+            margin-top: 0;
+            color: #0066cc;
+        }
+        .type-badge {
+            display: inline-block;
+            padding: 3px 8px;
+            border-radius: 3px;
+            font-size: 12px;
+            font-weight: bold;
+        }
+        .type-book {
+            background: #d4edda;
+            color: #155724;
+        }
+        .type-magazine {
+            background: #d1ecf1;
+            color: #0c5460;
+        }
+        label {
+            font-weight: bold;
+        }
+    </style>
+</head>
+<body>
+    <h1>📚 Library System</h1>
+    
+    <div class="nav">
+        <a href="/">Home</a>
+        <a href="/sorted">View Sorted by Title</a>
+        <a href="/add">Add Item</a>
+    </div>
+
+    <h2>All Items Sorted by Title</h2>
+
+    {{range .Items}}
+    <div class="item">
+        {{if eq .Type "book"}}
+        <span class="type-badge type-book">BOOK</span>
+        <h3>{{.Book.Title}}</h3>
+        <p><label>ISBN:</label> {{.Book.ISBN}}</p>
+        <p><label>Authors:</label> {{join ($.Library.GetAuthorNames .Book.Authors) ", "}}</p>
+        <p><label>Description:</label> {{.Book.Description}}</p>
+        {{else}}
+        <span class="type-badge type-magazine">MAGAZINE</span>
+        <h3>{{.Magazine.Title}}</h3>
+        <p><label>ISBN:</label> {{.Magazine.ISBN}}</p>
+        <p><label>Authors:</label> {{join ($.Library.GetAuthorNames .Magazine.Authors) ", "}}</p>
+        <p><label>Published:</label> {{.Magazine.PublishedAt}}</p>
+        {{end}}
+    </div>
+    {{end}}
+</body>
+</html>

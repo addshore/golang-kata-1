@@ -1,0 +1,140 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Add Item - Library System</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 20px;
+        }
+        h1, h2 {
+            color: #333;
+        }
+        .nav {
+            background: #f0f0f0;
+            padding: 10px;
+            margin-bottom: 20px;
+        }
+        .nav a {
+            margin-right: 15px;
+            text-decoration: none;
+            color: #0066cc;
+        }
+        .form-container {
+            background: #f9f9f9;
+            padding: 20px;
+            border-radius: 5px;
+        }
+        .form-group {
+            margin-bottom: 15px;
+        }
+        label {
+            display: block;
+            font-weight: bold;
+            margin-bottom: 5px;
+        }
+        input[type="text"], textarea, select {
+            width: 100%;
+            padding: 8px;
+            border: 1px solid #ddd;
+            border-radius: 3px;
+            box-sizing: border-box;
+        }
+        textarea {
+            resize: vertical;
+            min-height: 100px;
+        }
+        button {
+            background: #0066cc;
+            color: white;
+            padding: 10px 20px;
+            border: none;
+            border-radius: 3px;
+            cursor: pointer;
+        }
+        button:hover {
+            background: #0052a3;
+        }
+        .help-text {
+            font-size: 12px;
+            color: #666;
+            margin-top: 3px;
+        }
+        #bookFields, #magazineFields {
+            display: none;
+        }
+    </style>
+    <script>
+        function updateFields() {
+            var type = document.getElementById('type').value;
+            document.getElementById('bookFields').style.display = type === 'book' ? 'block' : 'none';
+            document.getElementById('magazineFields').style.display = type === 'magazine' ? 'block' : 'none';
+        }
+    </script>
+</head>
+<body>
+    <h1>📚 Library System</h1>
+    
+    <div class="nav">
+        <a href="/">Home</a>
+        <a href="/sorted">View Sorted by Title</a>
+        <a href="/add">Add Item</a>
+    </div>
+
+    <h2>Add New Item</h2>
+
+    <div class="form-container">
+        <form action="/add-submit" method="post">
+            <div class="form-group">
+                <label for="type">Item Type:</label>
+                <select id="type" name="type" onchange="updateFields()" required>
+                    <option value="">-- Select Type --</option>
+                    <option value="book">Book</option>
+                    <option value="magazine">Magazine</option>
+                </select>
+            </div>
+
+            <div class="form-group">
+                <label for="title">Title:</label>
+                <input type="text" id="title" name="title" required />
+            </div>
+
+            <div class="form-group">
+                <label for="isbn">ISBN:</label>
+                <input type="text" id="isbn" name="isbn" required />
+                <div class="help-text">Format: XXXX-XXXX-XXXX</div>
+            </div>
+
+            <div id="bookFields">
+                <div class="form-group">
+                    <label for="description">Description:</label>
+                    <textarea id="description" name="description"></textarea>
+                </div>
+            </div>
+
+            <div id="magazineFields">
+                <div class="form-group">
+                    <label for="publishedAt">Published Date:</label>
+                    <input type="text" id="publishedAt" name="publishedAt" />
+                    <div class="help-text">Format: DD.MM.YYYY</div>
+                </div>
+            </div>
+
+            <div class="form-group">
+                <label for="authors">Authors:</label>
+                <textarea id="authors" name="authors"></textarea>
+                <div class="help-text">
+                    Enter one author per line in format: email,firstname,lastname<br>
+                    Example:<br>
+                    john.doe@example.com,John,Doe<br>
+                    jane.smith@example.com,Jane,Smith
+                </div>
+            </div>
+
+            <button type="submit">Add Item</button>
+        </form>
+    </div>
+</body>
+</html>
