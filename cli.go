@@ -28,6 +28,32 @@ func (cli *CLI) DisplayAll() {
 	}
 }
 
+// SearchByISBN searches and displays results by ISBN
+func (cli *CLI) SearchByISBN(isbn string) {
+	books, magazines := cli.library.SearchByISBN(isbn)
+
+	if len(books) == 0 && len(magazines) == 0 {
+		fmt.Printf("\nNo results found for ISBN: %s\n", isbn)
+		return
+	}
+
+	fmt.Printf("\n=== SEARCH RESULTS FOR ISBN: %s ===\n", isbn)
+
+	if len(books) > 0 {
+		fmt.Println("\n--- BOOKS ---")
+		for _, book := range books {
+			cli.displayBook(book)
+		}
+	}
+
+	if len(magazines) > 0 {
+		fmt.Println("\n--- MAGAZINES ---")
+		for _, magazine := range magazines {
+			cli.displayMagazine(magazine)
+		}
+	}
+}
+
 func (cli *CLI) displayBook(book *Book) {
 	authorNames := cli.library.GetAuthorNames(book.Authors)
 	fmt.Printf("\nTitle: %s\n", book.Title)

@@ -191,3 +191,25 @@ func (lib *Library) GetAuthorNames(emails []string) []string {
 	}
 	return names
 }
+
+// SearchByISBN searches for books and magazines by ISBN
+func (lib *Library) SearchByISBN(isbn string) ([]*Book, []*Magazine) {
+	var books []*Book
+	var magazines []*Magazine
+
+	// Search books
+	for _, book := range lib.Books {
+		if book.ISBN == isbn {
+			books = append(books, book)
+		}
+	}
+
+	// Search magazines
+	for _, magazine := range lib.Magazines {
+		if magazine.ISBN == isbn {
+			magazines = append(magazines, magazine)
+		}
+	}
+
+	return books, magazines
+}

@@ -15,9 +15,29 @@ func main() {
 		os.Exit(1)
 	}
 
-	// Create and use CLI
+	// Create CLI
 	cli := NewCLI(library)
-	cli.DisplayAll()
+
+	// Check for command-line arguments
+	if len(os.Args) > 1 {
+		switch os.Args[1] {
+		case "search-isbn":
+			if len(os.Args) < 3 {
+				fmt.Println("Usage: go run . search-isbn <ISBN>")
+				os.Exit(1)
+			}
+			cli.SearchByISBN(os.Args[2])
+		case "list":
+			cli.DisplayAll()
+		default:
+			fmt.Printf("Unknown command: %s\n", os.Args[1])
+			fmt.Println("Available commands: list, search-isbn <ISBN>")
+			os.Exit(1)
+		}
+	} else {
+		// Default: display all
+		cli.DisplayAll()
+	}
 }
 
 func welcomeMessage() string {
