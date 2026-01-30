@@ -311,12 +311,17 @@ func (lib *Library) saveAuthors(filename string) error {
 	}
 	defer file.Close()
 
+	// Write BOM for UTF-8
+	if _, err := file.WriteString("\ufeff"); err != nil {
+		return err
+	}
+
 	writer := csv.NewWriter(file)
 	writer.Comma = ';'
 	defer writer.Flush()
 
-	// Write header with BOM
-	if err := writer.Write([]string{"\ufeffemail", "firstname", "lastname"}); err != nil {
+	// Write header
+	if err := writer.Write([]string{"email", "firstname", "lastname"}); err != nil {
 		return err
 	}
 
@@ -337,12 +342,17 @@ func (lib *Library) saveBooks(filename string) error {
 	}
 	defer file.Close()
 
+	// Write BOM for UTF-8
+	if _, err := file.WriteString("\ufeff"); err != nil {
+		return err
+	}
+
 	writer := csv.NewWriter(file)
 	writer.Comma = ';'
 	defer writer.Flush()
 
-	// Write header with BOM
-	if err := writer.Write([]string{"\ufefftitle", "isbn", "authors", "description"}); err != nil {
+	// Write header
+	if err := writer.Write([]string{"title", "isbn", "authors", "description"}); err != nil {
 		return err
 	}
 
@@ -364,12 +374,17 @@ func (lib *Library) saveMagazines(filename string) error {
 	}
 	defer file.Close()
 
+	// Write BOM for UTF-8
+	if _, err := file.WriteString("\ufeff"); err != nil {
+		return err
+	}
+
 	writer := csv.NewWriter(file)
 	writer.Comma = ';'
 	defer writer.Flush()
 
-	// Write header with BOM
-	if err := writer.Write([]string{"\ufefftitle", "isbn", "authors", "publishedAt"}); err != nil {
+	// Write header
+	if err := writer.Write([]string{"title", "isbn", "authors", "publishedAt"}); err != nil {
 		return err
 	}
 

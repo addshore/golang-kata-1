@@ -121,7 +121,7 @@ func (ws *WebServer) handleAdd(w http.ResponseWriter, r *http.Request) {
 
 func (ws *WebServer) handleAddSubmit(w http.ResponseWriter, r *http.Request) {
 	if r.Method != http.MethodPost {
-		http.Redirect(w, r, "/add", http.StatusSeeOther)
+		http.Error(w, "Method not allowed", http.StatusMethodNotAllowed)
 		return
 	}
 
@@ -131,8 +131,22 @@ func (ws *WebServer) handleAddSubmit(w http.ResponseWriter, r *http.Request) {
 	}
 
 	itemType := r.FormValue("type")
-	title := r.FormValue("title")
-	isbn := r.FormValue("isbn")
+	title := strings.TrimSpace(r.FormValue("title"))
+	isbn := strings.TrimSpace(r.FormValue("isbn"))
+
+	// Validate required fields
+	if itemType == "" {
+		http.Error(w, "Item type is required", http.StatusBadRequest)
+		return
+	}
+	if title == "" {
+		http.Error(w, "Title is required", http.StatusBadRequest)
+		return
+	}
+	if isbn == "" {
+		http.Error(w, "ISBN is required", http.StatusBadRequest)
+		return
+	}
 
 	// Parse authors
 	authorsInput := r.FormValue("authors")
@@ -154,16 +168,19 @@ func (ws *WebServer) handleAddSubmit(w http.ResponseWriter, r *http.Request) {
 	}
 
 	if itemType == "book" {
-		description := r.FormValue("description")
+		description := strings.TrimSpace(r.FormValue("description"))
 		ws.library.AddBook(title, isbn, description, authorEmails)
 	} else if itemType == "magazine" {
-		publishedAt := r.FormValue("publishedAt")
+		publishedAt := strings.TrimSpace(r.FormValue("publishedAt"))
 		ws.library.AddMagazine(title, isbn, publishedAt, authorEmails)
+	} else {
+		http.Error(w, "Invalid item type", http.StatusBadRequest)
+		return
 	}
 
 	// Save to CSV
 	if err := ws.library.SaveToCSV(ws.resourcesDir); err != nil {
-		http.Error(w, fmt.Sprintf("Failed to save: %v", err), http.StatusInternalServerError)
+		http.Error(w, "Failed to save changes to the library", http.StatusInternalServerError)
 		return
 	}
 
