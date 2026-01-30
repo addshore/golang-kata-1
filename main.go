@@ -35,11 +35,16 @@ func main() {
 			cli.SearchByAuthorEmail(os.Args[2])
 		case "sorted":
 			cli.DisplayAllSortedByTitle()
+		case "add":
+			if err := cli.AddItem("./resources"); err != nil {
+				fmt.Fprintf(os.Stderr, "Error adding item: %v\n", err)
+				os.Exit(1)
+			}
 		case "list":
 			cli.DisplayAll()
 		default:
 			fmt.Printf("Unknown command: %s\n", os.Args[1])
-			fmt.Println("Available commands: list, search-isbn <ISBN>, search-author <email>, sorted")
+			fmt.Println("Available commands: list, search-isbn <ISBN>, search-author <email>, sorted, add")
 			os.Exit(1)
 		}
 	} else {

@@ -1,7 +1,9 @@
 package main
 
 import (
+	"bufio"
 	"fmt"
+	"os"
 	"strings"
 )
 
@@ -116,4 +118,124 @@ func (cli *CLI) displayMagazine(magazine *Magazine) {
 	fmt.Printf("Authors: %s\n", strings.Join(authorNames, ", "))
 	fmt.Printf("Published At: %s\n", magazine.PublishedAt)
 	fmt.Println(strings.Repeat("-", 80))
+}
+
+// AddItem provides an interactive prompt to add a book or magazine
+func (cli *CLI) AddItem(resourcesDir string) error {
+	reader := bufio.NewReader(os.Stdin)
+
+	fmt.Println("\n=== ADD ITEM TO LIBRARY ===")
+	fmt.Println("What would you like to add?")
+	fmt.Println("1. Book")
+	fmt.Println("2. Magazine")
+	fmt.Print("Enter choice (1 or 2): ")
+
+	choice, _ := reader.ReadString('\n')
+	choice = strings.TrimSpace(choice)
+
+	if choice == "1" {
+		return cli.addBook(reader, resourcesDir)
+	} else if choice == "2" {
+		return cli.addMagazine(reader, resourcesDir)
+	} else {
+		return fmt.Errorf("invalid choice")
+	}
+}
+
+func (cli *CLI) addBook(reader *bufio.Reader, resourcesDir string) error {
+	fmt.Println("\n--- Adding a Book ---")
+
+	fmt.Print("Title: ")
+	title, _ := reader.ReadString('\n')
+	title = strings.TrimSpace(title)
+
+	fmt.Print("ISBN: ")
+	isbn, _ := reader.ReadString('\n')
+	isbn = strings.TrimSpace(isbn)
+
+	fmt.Print("Description: ")
+	description, _ := reader.ReadString('\n')
+	description = strings.TrimSpace(description)
+
+	// Get authors
+	authorEmails := cli.getAuthors(reader)
+
+	// Add the book
+	cli.library.AddBook(title, isbn, description, authorEmails)
+
+	// Save to CSV
+	if err := cli.library.SaveToCSV(resourcesDir); err != nil {
+		return fmt.Errorf("failed to save: %w", err)
+	}
+
+	fmt.Printf("\n✓ Book '%s' added successfully!\n", title)
+	return nil
+}
+
+func (cli *CLI) addMagazine(reader *bufio.Reader, resourcesDir string) error {
+	fmt.Println("\n--- Adding a Magazine ---")
+
+	fmt.Print("Title: ")
+	title, _ := reader.ReadString('\n')
+	title = strings.TrimSpace(title)
+
+	fmt.Print("ISBN: ")
+	isbn, _ := reader.ReadString('\n')
+	isbn = strings.TrimSpace(isbn)
+
+	fmt.Print("Published At (DD.MM.YYYY): ")
+	publishedAt, _ := reader.ReadString('\n')
+	publishedAt = strings.TrimSpace(publishedAt)
+
+	// Get authors
+	authorEmails := cli.getAuthors(reader)
+
+	// Add the magazine
+	cli.library.AddMagazine(title, isbn, publishedAt, authorEmails)
+
+	// Save to CSV
+	if err := cli.library.SaveToCSV(resourcesDir); err != nil {
+		return fmt.Errorf("failed to save: %w", err)
+	}
+
+	fmt.Printf("\n✓ Magazine '%s' added successfully!\n", title)
+	return nil
+}
+
+func (cli *CLI) getAuthors(reader *bufio.Reader) []string {
+	var authorEmails []string
+
+	fmt.Println("\nAuthors:")
+	fmt.Println("Enter author details. Press Enter with empty email to finish.")
+
+	for {
+		fmt.Print("  Author email: ")
+		email, _ := reader.ReadString('\n')
+		email = strings.TrimSpace(email)
+
+		if email == "" {
+			break
+		}
+
+		// Check if author exists
+		if _, exists := cli.library.Authors[email]; !exists {
+			fmt.Print("  First name: ")
+			firstName, _ := reader.ReadString('\n')
+			firstName = strings.TrimSpace(firstName)
+
+			fmt.Print("  Last name: ")
+			lastName, _ := reader.ReadString('\n')
+			lastName = strings.TrimSpace(lastName)
+
+			cli.library.AddAuthor(email, firstName, lastName)
+			fmt.Printf("  ✓ New author '%s %s' added\n", firstName, lastName)
+		} else {
+			author := cli.library.Authors[email]
+			fmt.Printf("  ✓ Using existing author: %s %s\n", author.FirstName, author.LastName)
+		}
+
+		authorEmails = append(authorEmails, email)
+	}
+
+	return authorEmails
 }

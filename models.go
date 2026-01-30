@@ -283,3 +283,137 @@ func (lib *Library) GetAllSortedByTitle() []Item {
 
 	return items
 }
+
+// SaveToCSV saves all library data back to CSV files
+func (lib *Library) SaveToCSV(resourcesDir string) error {
+	// Save authors
+	if err := lib.saveAuthors(resourcesDir + "/authors.csv"); err != nil {
+		return fmt.Errorf("failed to save authors: %w", err)
+	}
+
+	// Save books
+	if err := lib.saveBooks(resourcesDir + "/books.csv"); err != nil {
+		return fmt.Errorf("failed to save books: %w", err)
+	}
+
+	// Save magazines
+	if err := lib.saveMagazines(resourcesDir + "/magazines.csv"); err != nil {
+		return fmt.Errorf("failed to save magazines: %w", err)
+	}
+
+	return nil
+}
+
+func (lib *Library) saveAuthors(filename string) error {
+	file, err := os.Create(filename)
+	if err != nil {
+		return err
+	}
+	defer file.Close()
+
+	writer := csv.NewWriter(file)
+	writer.Comma = ';'
+	defer writer.Flush()
+
+	// Write header with BOM
+	if err := writer.Write([]string{"\ufeffemail", "firstname", "lastname"}); err != nil {
+		return err
+	}
+
+	// Write authors
+	for _, author := range lib.Authors {
+		if err := writer.Write([]string{author.Email, author.FirstName, author.LastName}); err != nil {
+			return err
+		}
+	}
+
+	return nil
+}
+
+func (lib *Library) saveBooks(filename string) error {
+	file, err := os.Create(filename)
+	if err != nil {
+		return err
+	}
+	defer file.Close()
+
+	writer := csv.NewWriter(file)
+	writer.Comma = ';'
+	defer writer.Flush()
+
+	// Write header with BOM
+	if err := writer.Write([]string{"\ufefftitle", "isbn", "authors", "description"}); err != nil {
+		return err
+	}
+
+	// Write books
+	for _, book := range lib.Books {
+		authors := strings.Join(book.Authors, ",")
+		if err := writer.Write([]string{book.Title, book.ISBN, authors, book.Description}); err != nil {
+			return err
+		}
+	}
+
+	return nil
+}
+
+func (lib *Library) saveMagazines(filename string) error {
+	file, err := os.Create(filename)
+	if err != nil {
+		return err
+	}
+	defer file.Close()
+
+	writer := csv.NewWriter(file)
+	writer.Comma = ';'
+	defer writer.Flush()
+
+	// Write header with BOM
+	if err := writer.Write([]string{"\ufefftitle", "isbn", "authors", "publishedAt"}); err != nil {
+		return err
+	}
+
+	// Write magazines
+	for _, magazine := range lib.Magazines {
+		authors := strings.Join(magazine.Authors, ",")
+		if err := writer.Write([]string{magazine.Title, magazine.ISBN, authors, magazine.PublishedAt}); err != nil {
+			return err
+		}
+	}
+
+	return nil
+}
+
+// AddBook adds a new book to the library
+func (lib *Library) AddBook(title, isbn, description string, authorEmails []string) {
+	book := &Book{
+		Title:       title,
+		ISBN:        isbn,
+		Authors:     authorEmails,
+		Description: description,
+	}
+	lib.Books = append(lib.Books, book)
+}
+
+// AddMagazine adds a new magazine to the library
+func (lib *Library) AddMagazine(title, isbn, publishedAt string, authorEmails []string) {
+	magazine := &Magazine{
+		Title:       title,
+		ISBN:        isbn,
+		Authors:     authorEmails,
+		PublishedAt: publishedAt,
+	}
+	lib.Magazines = append(lib.Magazines, magazine)
+}
+
+// AddAuthor adds a new author to the library
+func (lib *Library) AddAuthor(email, firstName, lastName string) {
+	if _, exists := lib.Authors[email]; !exists {
+		author := &Author{
+			Email:     email,
+			FirstName: firstName,
+			LastName:  lastName,
+		}
+		lib.Authors[email] = author
+	}
+}
