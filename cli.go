@@ -85,6 +85,21 @@ func (cli *CLI) SearchByAuthorEmail(email string) {
 	}
 }
 
+// DisplayAllSortedByTitle shows all books and magazines sorted by title
+func (cli *CLI) DisplayAllSortedByTitle() {
+	items := cli.library.GetAllSortedByTitle()
+
+	fmt.Println("\n=== ALL ITEMS SORTED BY TITLE ===")
+
+	for _, item := range items {
+		if item.Type == "book" {
+			cli.displayBook(item.Book)
+		} else {
+			cli.displayMagazine(item.Magazine)
+		}
+	}
+}
+
 func (cli *CLI) displayBook(book *Book) {
 	authorNames := cli.library.GetAuthorNames(book.Authors)
 	fmt.Printf("\nTitle: %s\n", book.Title)

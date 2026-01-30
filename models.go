@@ -4,6 +4,7 @@ import (
 	"encoding/csv"
 	"fmt"
 	"os"
+	"sort"
 	"strings"
 )
 
@@ -240,4 +241,45 @@ func (lib *Library) SearchByAuthorEmail(email string) ([]*Book, []*Magazine) {
 	}
 
 	return books, magazines
+}
+
+// Item represents either a book or magazine for sorting
+type Item struct {
+	Title    string
+	ISBN     string
+	Type     string // "book" or "magazine"
+	Book     *Book
+	Magazine *Magazine
+}
+
+// GetAllSortedByTitle returns all books and magazines sorted by title
+func (lib *Library) GetAllSortedByTitle() []Item {
+	var items []Item
+
+	// Add all books
+	for _, book := range lib.Books {
+		items = append(items, Item{
+			Title: book.Title,
+			ISBN:  book.ISBN,
+			Type:  "book",
+			Book:  book,
+		})
+	}
+
+	// Add all magazines
+	for _, magazine := range lib.Magazines {
+		items = append(items, Item{
+			Title:    magazine.Title,
+			ISBN:     magazine.ISBN,
+			Type:     "magazine",
+			Magazine: magazine,
+		})
+	}
+
+	// Sort by title
+	sort.Slice(items, func(i, j int) bool {
+		return strings.ToLower(items[i].Title) < strings.ToLower(items[j].Title)
+	})
+
+	return items
 }

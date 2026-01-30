@@ -33,11 +33,13 @@ func main() {
 				os.Exit(1)
 			}
 			cli.SearchByAuthorEmail(os.Args[2])
+		case "sorted":
+			cli.DisplayAllSortedByTitle()
 		case "list":
 			cli.DisplayAll()
 		default:
 			fmt.Printf("Unknown command: %s\n", os.Args[1])
-			fmt.Println("Available commands: list, search-isbn <ISBN>, search-author <email>")
+			fmt.Println("Available commands: list, search-isbn <ISBN>, search-author <email>, sorted")
 			os.Exit(1)
 		}
 	} else {
